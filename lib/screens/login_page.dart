@@ -1,6 +1,6 @@
+import 'package:employees_app/widgets/drawer.dart';
 import 'package:employees_app/widgets/sized.dart';
 import 'package:employees_app/screens/splash_screen.dart';
-import 'package:employees_app/widgets/text_field.dart';
 import 'package:employees_app/widgets/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,12 +30,12 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.all(25),
             child: Column(
               children: [
-                TextFieldMyApp(
+                textField(
                   hintText: "username",
                   controllers: userNameController,
                 ),
                 const Sized(heights: 20),
-                TextFieldMyApp(
+                textField(
                   hintText: "password",
                   controllers: passwordController,
                   obscure: true,
@@ -82,5 +82,27 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
     }
+  }
+
+  Widget textField(
+      {String? hintText, bool? obscure, TextEditingController? controllers}) {
+    return TextField(
+      controller: controllers,
+      obscureText: obscure ?? false,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(
+            20,
+          ),
+        ),
+        label: Text(
+          hintText ?? "",
+          style: TextStyle(
+              color: isDarkModeOn
+                  ? instanceOfColor.greyColor
+                  : instanceOfColor.blackColor),
+        ),
+      ),
+    );
   }
 }

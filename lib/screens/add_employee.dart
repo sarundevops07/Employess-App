@@ -31,6 +31,7 @@ class _AddEmployeeState extends State<AddEmployee> {
               children: [
                 AddEditDetails(
                   addUpdatePhoto: "Add a Photo",
+                  textOfButton: "Submit",
                 ),
               ],
             ),

@@ -27,7 +27,7 @@ class AddPhotoState extends State<AddPhoto> {
     if (imagePicked != null) {
       setState(() {
         imageFromPhone = File(imagePicked.path);
-        widget.onImageSelected(imageFromPhone); // Call the callback function
+        // widget.onImageSelected(imageFromPhone); // Call the callback function
       });
     }
   }
@@ -38,7 +38,7 @@ class AddPhotoState extends State<AddPhoto> {
     if (imageClicked != null) {
       setState(() {
         imageFromPhone = File(imageClicked.path);
-        widget.onImageSelected(imageFromPhone); // Call the callback function
+        //  widget.onImageSelected(imageFromPhone); // Call the callback function
       });
     }
   }

@@ -1,29 +1,35 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'dart:io';
 import 'package:employees_app/db/functions/db_functions.dart';
 import 'package:employees_app/db/model/model.dart';
 import 'package:employees_app/widgets/add_photo.dart';
+import 'package:employees_app/widgets/button.dart';
 import 'package:employees_app/widgets/drawer.dart';
 import 'package:employees_app/widgets/sized.dart';
-import 'package:employees_app/widgets/text_field.dart';
 import 'package:employees_app/widgets/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddEditDetails extends StatefulWidget {
   final String? addUpdatePhoto;
   final String? textOfButton;
-
-  const AddEditDetails({
-    super.key,
-    this.addUpdatePhoto,
-    this.textOfButton,
-  });
-
+  final EmployeeModel? employeeData;
+  final Function(File?)? onImageSelected;
+  const AddEditDetails(
+      {super.key,
+      this.addUpdatePhoto,
+      this.textOfButton,
+      this.employeeData,
+      this.onImageSelected});
   @override
   State<AddEditDetails> createState() => _AddEditDetailsState();
 }
 
 class _AddEditDetailsState extends State<AddEditDetails> {
   ColorTheme instanceOfColor = ColorTheme(0);
+  final String avtarDP = "lib/assets/avatar.webp";
+  File? imageFromPhone;
   final nameController = TextEditingController();
 
   final salaryController = TextEditingController();
@@ -31,6 +37,28 @@ class _AddEditDetailsState extends State<AddEditDetails> {
   final domainController = TextEditingController();
 
   final ageController = TextEditingController();
+
+  Future<void> galleryPicker() async {
+    final imagePicked =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (imagePicked != null) {
+      setState(() {
+        imageFromPhone = File(imagePicked.path);
+        // widget.onImageSelected(imageFromPhone); // Call the callback function
+      });
+    }
+  }
+
+  Future<void> cameraPicker() async {
+    final imageClicked =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (imageClicked != null) {
+      setState(() {
+        imageFromPhone = File(imageClicked.path);
+        //  widget.onImageSelected(imageFromPhone); // Call the callback function
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,33 +68,51 @@ class _AddEditDetailsState extends State<AddEditDetails> {
         children: [
           AddPhoto(
             photoText: widget.addUpdatePhoto ?? "",
-            onImageSelected: (image) => imageFromPhone = image,
+            onImageSelected: (image) => setState(() {
+              print("object" + image.toString());
+              imageFromPhone = image;
+            }),
           ),
           const Sized(heights: 20),
-          TextFieldMyApp(hintText: "name", controllers: nameController),
+          textField(hintText: "name", controllers: nameController),
           const Sized(heights: 20),
-          TextFieldMyApp(hintText: "salary", controllers: salaryController),
+          textField(hintText: "salary", controllers: salaryController),
           const Sized(heights: 20),
-          TextFieldMyApp(hintText: "domain", controllers: domainController),
+          textField(hintText: "domain", controllers: domainController),
           const Sized(heights: 20),
-          TextFieldMyApp(hintText: "age", controllers: ageController),
+          textField(hintText: "age", controllers: ageController),
           const Sized(heights: 20),
-          SizedBox(
-            height: 35,
-            width: 80,
-            child: ElevatedButton(
-              onPressed: () {
-                print("button not clicked");
-                submitButtonPressed(
-                  context,
-                  imageFromPhone.toString(),
-                );
-                print("button clicked");
-              },
-              child: const Text("Submit"),
-            ),
+          Button(
+            buttonText: widget.textOfButton,
+            onPress: (context) {
+              submitButtonPressed(context, imageFromPhone.toString());
+              print("image from phone valueee isssssssssss" +
+                  imageFromPhone.toString());
+            },
           )
         ],
+      ),
+    );
+  }
+
+  Widget textField(
+      {String? hintText, bool? obscure, TextEditingController? controllers}) {
+    return TextField(
+      controller: controllers,
+      obscureText: obscure ?? false,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(
+            20,
+          ),
+        ),
+        label: Text(
+          hintText ?? "",
+          style: TextStyle(
+              color: isDarkModeOn
+                  ? instanceOfColor.greyColor
+                  : instanceOfColor.blackColor),
+        ),
       ),
     );
   }
@@ -102,14 +148,9 @@ class _AddEditDetailsState extends State<AddEditDetails> {
           name: name,
           salary: salary,
           imageFromPhone: image.toString());
-      print("Path is here: ${employeeData.imageFromPhone}");
-      addDetails(
-        employeeData,
-      );
-      Navigator.pushNamed(
-        ctx,
-        "HomeScreen",
-      );
+      print("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" + image);
+      DataBaseFunctions().addDetails(employeeData);
+      Navigator.pushNamed(ctx, "HomeScreen");
     }
   }
 }

@@ -117,9 +117,14 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
       _popupMenuItemIndex = value;
     });
     if (value == Options.edit.index) {
-      Navigator.pushNamed(context, "EditEmployeeDetails");
+      // Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+      //   return EditEmployeeDetails(
+      //     addUpdatePhoto: widget.employeeData.imageFromPhone.toString(),
+      //     textOfButton: "Update",
+      //     employeeData: widget.employeeData,
+      //   );
+      // }));
     } else if (value == Options.delete.index) {
-      print("employee details deleted");
       widget.onDeleteSelected(widget.employeeData);
     }
   }

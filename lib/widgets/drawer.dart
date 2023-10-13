@@ -1,13 +1,13 @@
 // ignore_for_file: must_be_immutable
 import 'package:employees_app/main.dart';
-
 import 'package:employees_app/widgets/theme.dart';
 import 'package:flutter/material.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Drawers extends StatefulWidget {
-  const Drawers({super.key});
+  const Drawers({
+    super.key,
+  });
   @override
   State<Drawers> createState() => _DrawersState();
 }
@@ -16,11 +16,9 @@ bool isDarkModeOn = false;
 
 class _DrawersState extends State<Drawers> {
   ColorTheme instanceOfColor = ColorTheme(0);
-  //bool isDarkModeEnabled = false;
 
   @override
   Widget build(BuildContext context) {
-    // DarkModeProvider darkModeProvider = DarkModeProvider();
     return Scaffold(
       backgroundColor:
           isDarkModeOn ? instanceOfColor.greyColor : instanceOfColor.whiteColor,
@@ -62,6 +60,10 @@ class _DrawersState extends State<Drawers> {
                 ),
         ),
       );
+  void saveDarkModeState() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('darkMode', isDarkModeOn);
+  }
 
   Widget signOutDrawer(BuildContext ctx) => ListTile(
         leading: const CircleAvatar(
